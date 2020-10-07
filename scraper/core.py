@@ -11,12 +11,15 @@ from scraper.url_builder import UrlBuilder
 class Scraper:
     """This class is the cornerstone of our project, it handles the the retrieval of content from the web"""
 
-    def __init__(self):
+    def __init__(self, ua_spoofer):
         db_listing = DatabaseListing()
         self.paris_districts = db_listing.get_paris_districts()
         self.listings = []
         self.url_builder = UrlBuilder()
-        self.user_agent_spoofer = shadow_useragent.ShadowUserAgent()
+        if ua_spoofer:
+            self.user_agent_spoofer = shadow_useragent.ShadowUserAgent()
+        else:
+            self.user_agent_spoofer = None
 
     @staticmethod
     def authenticate():
@@ -44,7 +47,11 @@ class Scraper:
         while retrieved_results:
             url = self.url_builder.get_district_url(page, district_id)
             logging.info(f"Requesting content from URL {url}")
-            web_page = settings.web_session.get(url, headers={'User-Agent': self.user_agent_spoofer.random_nomobile})
+            if self.user_agent_spoofer is not None:
+                web_page = settings.web_session.get(url,
+                                                    headers={'User-Agent': self.user_agent_spoofer.random_nomobile})
+            else:
+                web_page = settings.web_session.get(url)
             parser = HtmlParser(web_page.content)
             listings = parser.extract_listings(district_id)
             retrieved_results = listings != []

@@ -48,7 +48,11 @@ class HtmlParser:
 
     def get_csrf_token(self):
         csrf_input = self.soup.find("input", {"id": "user_csrf_token"})
-        return csrf_input.get('value')
+        try:
+            return csrf_input.get('value')
+        except AttributeError as e:
+            logging.error(f"Cannot extract CSRF token")
+            return ""
 
     def print_page_content(self):
         print(self.soup.prettify())

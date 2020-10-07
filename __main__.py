@@ -12,12 +12,15 @@ def main():
     )
     parser.add_argument("-v", "--verbose", help="Sets logging level to debug",
                         action="store_true")
+    parser.add_argument("-s", "--uaspoofer",
+                        help="If enabled, this will spoof a user agent in order to avoid bot detection",
+                        action="store_true")
     args = parser.parse_args()
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
     logging.info(f"Authenticating to MA as {settings.MA_USERNAME}...")
     Scraper.authenticate()
-    scraper = Scraper()
+    scraper = Scraper(args.uaspoofer)
     logging.info("Retrieving listings...")
     listings = scraper.retrieve_listings()
     logging.info(f"Inserting / updating {len(listings)} listings in database...")
