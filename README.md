@@ -1,4 +1,4 @@
-# MA Scrapper
+# MA Scraper
 
 This project scraps a well-known website.
 
