@@ -1,3 +1,4 @@
+import logging
 import re
 
 from bs4 import BeautifulSoup
@@ -14,7 +15,11 @@ class HtmlParser:
         listing_divs = self.soup.findAll("div", {"class": "listing-item"})
         for listing_div in listing_divs:
             listing_metadata = listing_div['data-wa-data'].split('|')
-            price_text = listing_div.find("div", {"class": "listing-price"}).text
+            try:
+                price_text = listing_div.find("div", {"class": "listing-price"}).text
+            except AttributeError as e:
+                logging.error(f"Cannot find price for listing with ID {int(listing_metadata[0].replace('listing_id=', ''))}")
+                price_text = "0 €"
             characteristics_text = listing_div.find("div", {"class": "listing-characteristic"}).text
             listings.append({
                 'listing_id': int(listing_metadata[0].replace('listing_id=', '')),
@@ -26,12 +31,20 @@ class HtmlParser:
         return listings
 
     def extract_area(self, characteristics_text):
-        return re.findall(r'\d+', characteristics_text)[-1]
+        try:
+            return re.findall(r'\d+', characteristics_text)[-1]
+        except IndexError as e:
+            logging.error(f"Cannot extract area from value {characteristics_text}")
+            return '0'
 
     def extract_room_number(self, characteristics_text):
         if characteristics_text.split(' ', 1)[0] == "Studio":
             return '1'
-        return re.search(r'\d+', characteristics_text).group()
+        try:
+            return re.search(r'\d+', characteristics_text).group()
+        except AttributeError as e:
+            logging.error(f"Cannot extract room number from value {characteristics_text}")
+            return '0'
 
     def get_csrf_token(self):
         csrf_input = self.soup.find("input", {"id": "user_csrf_token"})
