@@ -26,6 +26,7 @@ BASE_SCRAPING_URL = "https://www.meilleursagents.com/annonces/achat/search/"
 CONNECT_URL = "https://www.meilleursagents.com/_signin?show=signin"
 MA_USERNAME = os.getenv("MA_USERNAME")
 MA_PASSWORD = os.getenv("MA_PASSWORD")
-psql_engine = create_engine(f'postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}')
+SQLALCHEMY_CONNECTION_STRING = f'postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}'
+psql_engine = create_engine(SQLALCHEMY_CONNECTION_STRING)
 Session = sessionmaker(bind=psql_engine)
 web_session = requests.Session()

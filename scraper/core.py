@@ -17,7 +17,8 @@ class Scraper:
         self.url_builder = UrlBuilder()
         self.user_agent_spoofer = shadow_useragent.ShadowUserAgent()
 
-    def authenticate(self):
+    @staticmethod
+    def authenticate():
         web_page = settings.web_session.get(settings.CONNECT_URL)
         parser = HtmlParser(web_page.content)
         settings.web_session.post(settings.CONNECT_URL, {
@@ -44,9 +45,6 @@ class Scraper:
             logging.info(f"Requesting content from URL {url}")
             web_page = settings.web_session.get(url, headers={'User-Agent': self.user_agent_spoofer.random_nomobile})
             parser = HtmlParser(web_page.content)
-            with open("/home/dimitri/Documents/ma-scrapper/samples/listings.html") as f:
-                content = f.read()
-            parser = HtmlParser(content)
             listings = parser.extract_listings(district_id)
             retrieved_results = listings != []
             district_listings += listings

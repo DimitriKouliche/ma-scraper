@@ -17,11 +17,11 @@ class HtmlParser:
             price_text = listing_div.find("div", {"class": "listing-price"}).text
             characteristics_text = listing_div.find("div", {"class": "listing-characteristic"}).text
             listings.append({
-                'listing_id': listing_metadata[0].replace('listing_id=', ''),
-                'listing_price': re.sub('[^0-9,.]', '', price_text),
-                'room_number': self.extract_room_number(characteristics_text.strip()),
-                'area': self.extract_area(characteristics_text.strip()),
-                'district_id': district_id
+                'listing_id': int(listing_metadata[0].replace('listing_id=', '')),
+                'listing_price': int(re.sub('[^0-9,.]', '', price_text)),
+                'room_number': int(self.extract_room_number(characteristics_text.strip())),
+                'area': int(self.extract_area(characteristics_text.strip())),
+                'district_id': int(district_id)
             })
         return listings
 
