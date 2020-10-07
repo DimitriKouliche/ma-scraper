@@ -30,7 +30,7 @@ class HtmlParser:
 
     def extract_room_number(self, characteristics_text):
         if characteristics_text.split(' ', 1)[0] == "Studio":
-            return 1
+            return '1'
         return re.search(r'\d+', characteristics_text).group()
 
     def get_csrf_token(self):

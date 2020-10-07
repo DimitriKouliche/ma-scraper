@@ -3,7 +3,7 @@ import logging
 import shadow_useragent
 
 import settings
-from scraper.db_utils import get_paris_districts
+from scraper.db_utils import DatabaseListing
 from scraper.parsers import HtmlParser
 from scraper.url_builder import UrlBuilder
 
@@ -12,7 +12,8 @@ class Scraper:
     """This class is the cornerstone of our project, it handles the the retrieval of content from the web"""
 
     def __init__(self):
-        self.paris_districts = get_paris_districts()
+        db_listing = DatabaseListing()
+        self.paris_districts = db_listing.get_paris_districts()
         self.listings = []
         self.url_builder = UrlBuilder()
         self.user_agent_spoofer = shadow_useragent.ShadowUserAgent()

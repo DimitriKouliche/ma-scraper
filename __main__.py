@@ -1,6 +1,6 @@
 import settings
 from scraper.core import Scraper
-from scraper.db_utils import create_listings
+from scraper.db_utils import DatabaseListing
 import argparse
 import logging
 
@@ -21,7 +21,8 @@ def main():
     logging.info("Retrieving listings...")
     listings = scraper.retrieve_listings()
     logging.info(f"Inserting / updating {len(listings)} listings in database...")
-    create_listings(listings)
+    db_listing = DatabaseListing()
+    db_listing.create_listings(listings)
 
 
 if __name__ == '__main__':
