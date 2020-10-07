@@ -14,7 +14,6 @@ class Scraper:
     def __init__(self, ua_spoofer):
         db_listing = DatabaseListing()
         self.paris_districts = db_listing.get_paris_districts()
-        self.listings = []
         self.url_builder = UrlBuilder()
         if ua_spoofer:
             self.user_agent_spoofer = shadow_useragent.ShadowUserAgent()
