@@ -28,11 +28,14 @@ class DatabaseListing:
 
     def create_or_update_listing(self, listing):
         today = date.today()
-        listing_object = self.session.query(Listing).filter(Listing.id == listing['listing_id'])
+        listing_object = self.session.query(Listing).get(listing['listing_id'])
         if listing_object is None:
             logging.debug(f"Importing new listing with ID {listing['listing_id']}")
             listing_object = Listing(id=listing['listing_id'], first_scraping_date=today)
             self.session.add(listing_object)
+            self.session.commit()
+        else:
+            logging.debug(f"Listing with ID {listing['listing_id']} is already in database, updating data")
         listing_object.room_number = listing['room_number']
         listing_object.area = listing['area']
         listing_object.district = listing['district_id']
