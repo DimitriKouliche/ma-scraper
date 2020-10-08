@@ -36,6 +36,9 @@ class DatabaseListing:
             self.session.commit()
         else:
             logging.debug(f"Listing with ID {listing['listing_id']} is already in database, updating data")
+        if listing['listing_price'] / listing['area'] > 60000:
+            listing['listing_price'] = 0
+            listing['area'] = 0
         listing_object.room_number = listing['room_number']
         listing_object.area = listing['area']
         listing_object.district = listing['district_id']

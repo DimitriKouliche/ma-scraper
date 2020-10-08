@@ -39,3 +39,4 @@ def test_get_paris_districts():
     districts = db_listing.get_paris_districts()
     print(districts)
     assert districts == {}
+
